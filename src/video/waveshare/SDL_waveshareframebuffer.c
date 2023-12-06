@@ -54,7 +54,8 @@ int SDL_WAVESHARE_CreateWindowFramebuffer(_THIS, SDL_Window *window, Uint32 *for
 
 int SDL_WAVESHARE_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect *rects, int numrects)
 {
-    static int frame_number;
+    // UWORD *BlackImage = (UWORD *)window->driverdata;
+
     SDL_Surface *surface;
 
     surface = (SDL_Surface *)SDL_GetWindowData(window, WAVESHARE_SURFACE);
@@ -64,10 +65,13 @@ int SDL_WAVESHARE_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_R
 
     /* Send the data to the display */
     if (SDL_getenv("SDL_VIDEO_WAVESHARE_SAVE_FRAMES")) {
-        char file[128];
-        (void)SDL_snprintf(file, sizeof(file), "SDL_window%" SDL_PRIu32 "-%8.8d.bmp",
-                           SDL_GetWindowID(window), ++frame_number);
-        SDL_SaveBMP(surface, file);
+        for (int x = 0; x < surface->w; x++) {
+            for (int y = 0; y < surface->h; y++) {
+                Paint_SetPixel(x, y, surface->pixels[x*y]);
+            }
+        }
+
+        LCD_1IN47_Display(BlackImage);
     }
     return 0;
 }

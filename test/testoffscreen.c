@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
     SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO);
 
     /* Force the offscreen renderer, if it cannot be created then fail out */
-    if (SDL_VideoInit("offscreen") < 0) {
+    if (SDL_VideoInit("waveshare") < 0) {
         SDL_Log("Couldn't initialize the waveshare video driver: %s\n",
                 SDL_GetError());
         return SDL_FALSE;

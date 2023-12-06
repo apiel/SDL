@@ -12,7 +12,7 @@
 #ifndef __LCD_1IN9_H
 #define __LCD_1IN9_H   
     
-#include "DEV_Config.h"
+#include "../Config/DEV_Config.h"
 #include <stdint.h>
 
 #include <stdlib.h>     //itoa()

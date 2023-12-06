@@ -20,6 +20,11 @@
 */
 #include "../../SDL_internal.h"
 
+#include "lib/Config/DEV_Config.h"
+#include "lib/LCD/LCD_1in47.h"
+
+UWORD *BlackImage;
+
 extern int SDL_WAVESHARE_CreateWindowFramebuffer(_THIS, SDL_Window *window, Uint32 *format, void **pixels, int *pitch);
 extern int SDL_WAVESHARE_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect *rects, int numrects);
 extern void SDL_WAVESHARE_DestroyWindowFramebuffer(_THIS, SDL_Window *window);

@@ -32,10 +32,13 @@
 
 #include "SDL_video.h"
 
-#include "SDL_wavesharevideo.h"
 #include "SDL_waveshareevents_c.h"
 #include "SDL_waveshareframebuffer_c.h"
+#include "SDL_wavesharevideo.h"
 #include "SDL_wavesharewindow.h"
+
+#include "lib/Config/DEV_Config.h"
+#include "lib/LCD/LCD_1in47.h"
 
 #define WAVESHAREVID_DRIVER_NAME "waveshare"
 
@@ -90,9 +93,9 @@ int WAVESHARE_VideoInit(_THIS)
 
     /* Use a fake 32-bpp desktop mode */
     mode.format = SDL_PIXELFORMAT_RGB888;
-    mode.w = 1024;
-    mode.h = 768;
-    mode.refresh_rate = 0;
+    mode.w = LCD_1IN47_HEIGHT;
+    mode.h = LCD_1IN47_WIDTH;
+    // mode.refresh_rate = 0;
     mode.driverdata = NULL;
     if (SDL_AddBasicVideoDisplay(&mode) < 0) {
         return -1;
@@ -100,6 +103,24 @@ int WAVESHARE_VideoInit(_THIS)
 
     SDL_zero(mode);
     SDL_AddDisplayMode(&_this->displays[0], &mode);
+
+    /* Module Init */
+    if (DEV_ModuleInit() != 0) {
+        return -1;
+    }
+
+    /* LCD Init */
+    printf("1.47inch LCD demo...\r\n");
+    LCD_1IN47_Init(HORIZONTAL);
+    LCD_1IN47_Clear(BLACK);
+    LCD_SetBacklight(1023);
+
+    UDOUBLE Imagesize = LCD_1IN47_HEIGHT * LCD_1IN47_WIDTH * 2;
+    if((BlackImage = (UWORD *)malloc(Imagesize)) == NULL) {
+        return -1;
+    }
+    /*1.Create a new image cache named IMAGE_RGB and fill it with white*/
+    Paint_NewImage(BlackImage, LCD_1IN47_WIDTH, LCD_1IN47_HEIGHT, 90, BLACK, 16);
 
     /* We're done! */
     return 0;
