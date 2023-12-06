@@ -11,5 +11,7 @@ main:
 
 build:
 	rm -rf ../build
+	mkdir ../build
 	cd ../build && ../configure --disable-atomic --disable-audio --disable-joystick --disable-haptic --disable-hidapi --disable-sensor --disable-power --disable-filesystem --disable-file --disable-misc --disable-locale --disable-cpuinfo --disable-video-x11 --disable-x11-shared --disable-video-vivante --disable-video-wayland --enable-video-waveshare
-	make
+	cd ../build && make
+
