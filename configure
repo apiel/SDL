@@ -1750,6 +1750,8 @@ Optional Features:
   --enable-video-dummy    use dummy video driver [default=yes]
   --enable-video-offscreen
                           use offscreen video driver [default=yes]
+  --enable-video-waveshare
+                          use waveshare video driver [default=yes]
   --enable-video-opengl   include OpenGL support [default=yes]
   --enable-video-opengles include OpenGL ES support [default=yes]
   --enable-video-opengles1
@@ -25899,6 +25901,26 @@ printf "%s\n" "#define SDL_VIDEO_DRIVER_OFFSCREEN 1" >>confdefs.h
     fi
 }
 
+CheckWaveshareVideo()
+{
+    # Check whether --enable-video-waveshare was given.
+if test ${enable_video_waveshare+y}
+then :
+  enableval=$enable_video_waveshare;
+else $as_nop
+  enable_video_waveshare=yes
+fi
+
+    if test x$enable_video_waveshare = xyes; then
+
+printf "%s\n" "#define SDL_VIDEO_DRIVER_WAVESHARE 1" >>confdefs.h
+
+        SOURCES="$SOURCES $srcdir/src/video/waveshare/*.c"
+        have_video=yes
+        SUMMARY_video="${SUMMARY_video} waveshare"
+    fi
+}
+
 CheckQNXVideo()
 {
     if test x$enable_video = xyes; then
@@ -28618,6 +28640,7 @@ printf "%s\n" "#define SDL_VIDEO_DRIVER_ANDROID 1" >>confdefs.h
         CheckDeclarationAfterStatement
         CheckDummyVideo
         CheckOffscreenVideo
+        CheckWaveshareVideo
         CheckDiskAudio
         CheckDummyAudio
         CheckDLOPEN
@@ -28888,6 +28911,7 @@ printf "%s\n" "#define SDL_TIMER_UNIX 1" >>confdefs.h
         CheckDeclarationAfterStatement
         CheckDummyVideo
         CheckOffscreenVideo
+        CheckWaveshareVideo
         CheckDiskAudio
         CheckDummyAudio
         CheckWINDOWS
@@ -29141,6 +29165,7 @@ fi
         ac_default_prefix=/boot/system
         CheckDummyVideo
         CheckOffscreenVideo
+        CheckWaveshareVideo
         CheckDiskAudio
         CheckDummyAudio
         CheckDLOPEN
@@ -29213,6 +29238,7 @@ printf "%s\n" "#define SDL_FILESYSTEM_HAIKU 1" >>confdefs.h
         CheckDeclarationAfterStatement
         CheckDummyVideo
         CheckOffscreenVideo
+        CheckWaveshareVideo
         CheckDiskAudio
         CheckDummyAudio
         CheckDLOPEN
@@ -29352,6 +29378,7 @@ printf "%s\n" "#define SDL_VIDEO_RENDER_OGL_ES2 1" >>confdefs.h
         CheckDeclarationAfterStatement
         CheckDummyVideo
         CheckOffscreenVideo
+        CheckWaveshareVideo
         CheckDiskAudio
         CheckDummyAudio
         CheckDLOPEN
@@ -29453,6 +29480,7 @@ printf "%s\n" "#define SDL_TIMER_UNIX 1" >>confdefs.h
         CheckDummyAudio
         CheckDummyVideo
         CheckOffscreenVideo
+        CheckWaveshareVideo
         CheckInputEvents
         CheckPTHREAD
         CheckO_CLOEXEC
@@ -29498,6 +29526,7 @@ printf "%s\n" "#define SDL_AUDIO_DRIVER_EMSCRIPTEN 1" >>confdefs.h
         CheckDeclarationAfterStatement
         CheckDummyVideo
         CheckOffscreenVideo
+        CheckWaveshareVideo
         CheckDiskAudio
         CheckDummyAudio
         CheckPTHREAD
@@ -29558,6 +29587,7 @@ printf "%s\n" "#define SDL_TIMER_UNIX 1" >>confdefs.h
         CheckDeclarationAfterStatement
         CheckDummyVideo
         CheckOffscreenVideo
+        CheckWaveshareVideo
         CheckDiskAudio
         CheckDummyAudio
         CheckDLOPEN

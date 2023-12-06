@@ -65,6 +65,8 @@ int OFFSCREEN_CreateWindow(_THIS, SDL_Window *window)
     }
 #endif /* SDL_VIDEO_OPENGL_EGL */
 
+printf("yeaaaaaaaaaaaaaaaaaaaaaaaaaaaaah i am in offscreen");
+
     return 0;
 }
 

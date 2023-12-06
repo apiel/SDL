@@ -1260,6 +1260,13 @@ if(SDL_VIDEO)
     set(HAVE_OFFSCREEN TRUE)
     set(HAVE_SDL_VIDEO TRUE)
   endif()
+  if(SDL_WAVESHARE)
+    set(SDL_VIDEO_DRIVER_WAVESHARE 1)
+    file(GLOB VIDEO_WAVESHARE_SOURCES ${SDL2_SOURCE_DIR}/src/video/waveshare/*.c)
+    list(APPEND SOURCE_FILES ${VIDEO_WAVESHARE_SOURCES})
+    set(HAVE_WAVESHARE TRUE)
+    set(HAVE_SDL_VIDEO TRUE)
+  endif()
 endif()
 
 # Platform-specific options and settings

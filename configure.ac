@@ -2510,6 +2510,19 @@ CheckOffscreenVideo()
     fi
 }
 
+CheckWaveshareVideo()
+{
+    AC_ARG_ENABLE(video-waveshare,
+[AS_HELP_STRING([--enable-video-waveshare], [use waveshare video driver [default=yes]])],
+                  , enable_video_waveshare=yes)
+    if test x$enable_video_waveshare = xyes; then
+        AC_DEFINE(SDL_VIDEO_DRIVER_WAVESHARE, 1, [ ])
+        SOURCES="$SOURCES $srcdir/src/video/waveshare/*.c"
+        have_video=yes
+        SUMMARY_video="${SUMMARY_video} waveshare"
+    fi
+}
+
 dnl Set up the QNX video driver if enabled
 CheckQNXVideo()
 {
@@ -3824,6 +3837,7 @@ case "$host" in
         CheckDeclarationAfterStatement
         CheckDummyVideo
         CheckOffscreenVideo
+        CheckWaveshareVideo
         CheckDiskAudio
         CheckDummyAudio
         CheckDLOPEN
@@ -4060,6 +4074,7 @@ case "$host" in
         CheckDeclarationAfterStatement
         CheckDummyVideo
         CheckOffscreenVideo
+        CheckWaveshareVideo
         CheckDiskAudio
         CheckDummyAudio
         CheckWINDOWS
@@ -4224,6 +4239,7 @@ dnl BeOS support removed after SDL 2.0.1. Haiku still works.  --ryan.
         ac_default_prefix=/boot/system
         CheckDummyVideo
         CheckOffscreenVideo
+        CheckWaveshareVideo
         CheckDiskAudio
         CheckDummyAudio
         CheckDLOPEN
@@ -4286,6 +4302,7 @@ dnl BeOS support removed after SDL 2.0.1. Haiku still works.  --ryan.
         CheckDeclarationAfterStatement
         CheckDummyVideo
         CheckOffscreenVideo
+        CheckWaveshareVideo
         CheckDiskAudio
         CheckDummyAudio
         CheckDLOPEN
@@ -4403,6 +4420,7 @@ dnl BeOS support removed after SDL 2.0.1. Haiku still works.  --ryan.
         CheckDeclarationAfterStatement
         CheckDummyVideo
         CheckOffscreenVideo
+        CheckWaveshareVideo
         CheckDiskAudio
         CheckDummyAudio
         CheckDLOPEN
@@ -4492,6 +4510,7 @@ dnl BeOS support removed after SDL 2.0.1. Haiku still works.  --ryan.
         CheckDummyAudio
         CheckDummyVideo
         CheckOffscreenVideo
+        CheckWaveshareVideo
         CheckInputEvents
         CheckPTHREAD
         CheckO_CLOEXEC
@@ -4529,6 +4548,7 @@ dnl BeOS support removed after SDL 2.0.1. Haiku still works.  --ryan.
         CheckDeclarationAfterStatement
         CheckDummyVideo
         CheckOffscreenVideo
+        CheckWaveshareVideo
         CheckDiskAudio
         CheckDummyAudio
         CheckPTHREAD
@@ -4581,6 +4601,7 @@ dnl BeOS support removed after SDL 2.0.1. Haiku still works.  --ryan.
         CheckDeclarationAfterStatement
         CheckDummyVideo
         CheckOffscreenVideo
+        CheckWaveshareVideo
         CheckDiskAudio
         CheckDummyAudio
         CheckDLOPEN
