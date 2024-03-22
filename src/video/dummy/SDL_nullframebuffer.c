@@ -109,7 +109,7 @@ void InitSPIDisplay()
 #define MADCTL_ROW_ADDRESS_ORDER_SWAP    (1 << 7)
 #define MADCTL_ROTATE_180_DEGREES        (MADCTL_COLUMN_ADDRESS_ORDER_SWAP | MADCTL_ROW_ADDRESS_ORDER_SWAP)
 
-    madctl |= MADCTL_ROW_ADDRESS_ORDER_SWAP;
+    // madctl |= MADCTL_ROW_ADDRESS_ORDER_SWAP;
     madctl ^= MADCTL_ROTATE_180_DEGREES;
 
     sendCmdData(0x36 /*MADCTL: Memory Access Control*/, madctl);
