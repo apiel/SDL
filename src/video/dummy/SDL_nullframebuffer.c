@@ -206,7 +206,7 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
 
     for (x = 0; x < surface->w; x++) {
         for (y = 0; y < surface->h; y++) {
-            uint16_t pixel = (uint16_t)surface->pixels[y * surface->pitch + x];
+            uint16_t pixel = surface->pixels[y * surface->pitch + x];
             drawPixel(x, y, pixel);
         }
     }
