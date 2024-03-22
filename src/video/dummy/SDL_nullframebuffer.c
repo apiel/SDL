@@ -221,7 +221,7 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     for (x = 0; x < w; x++) {
         for (y = 0; y < h; y++) {
             // pos = y * surface->pitch + x ;
-            pos = (y * surface->w + x) * surface->format->BitsPerPixel;
+            pos = (y * surface->w + x) * surface->format->BytesPerPixel;
             pixels = surface->pixels + pos;
             // pixel[0] = pixels[0];
             // pixel[1] = pixels[1];
