@@ -185,6 +185,7 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     int i, bw, pad, x, y;
     uint8_t pixel[BYTESPERPIXEL];
     int pos;
+    uint8_t * pixels;
 
     surface = (SDL_Surface *)SDL_GetWindowData(window, DUMMY_SURFACE);
     if (!surface) {
@@ -209,12 +210,13 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     for (x = 0; x < surface->w; x++) {
         for (y = 0; y < surface->h; y++) {
             pos = y * surface->pitch + x;
-            pixel[0] = (uint8_t)surface->pixels[pos];
-            pixel[1] = (uint8_t)surface->pixels[pos + 1];
+pixels = surface->pixels + pos;
+            // pixel[0] = (uint8_t)surface->pixels[pos];
+            // pixel[1] = (uint8_t)surface->pixels[pos + 1];
 
             sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)x, (uint16_t)x);
             sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
-            sendCmd(DISPLAY_WRITE_PIXELS, pixel, 2);
+            sendCmd(DISPLAY_WRITE_PIXELS, pixels, 2);
         }
     }
 
