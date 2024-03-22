@@ -208,6 +208,7 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     // //     drawPixel(0, 0, 0);
     // // }
 
+    printf("Updating framebuffer\n");
     if (!yodrawed) {
         drawFillRect(20, 40, 20, 20, 0xFF00FF);
     } else {
@@ -238,8 +239,8 @@ void SDL_DUMMY_DestroyWindowFramebuffer(_THIS, SDL_Window *window)
     surface = (SDL_Surface *)SDL_SetWindowData(window, DUMMY_SURFACE, NULL);
     SDL_FreeSurface(surface);
 
-    DeinitSPI();
-    printf("Quit.\n");
+    // DeinitSPI();
+    // printf("Quit.\n");
 }
 
 #endif /* SDL_VIDEO_DRIVER_DUMMY */
