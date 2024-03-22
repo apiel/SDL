@@ -109,7 +109,7 @@ void InitSPIDisplay()
 #define MADCTL_ROW_ADDRESS_ORDER_SWAP    (1 << 7)
 #define MADCTL_ROTATE_180_DEGREES        (MADCTL_COLUMN_ADDRESS_ORDER_SWAP | MADCTL_ROW_ADDRESS_ORDER_SWAP)
 
-    // madctl |= MADCTL_ROW_ADDRESS_ORDER_SWAP;
+    madctl |= MADCTL_ROW_ADDRESS_ORDER_SWAP;
     madctl ^= MADCTL_ROTATE_180_DEGREES;
 
     sendCmdData(0x36 /*MADCTL: Memory Access Control*/, madctl);
@@ -127,9 +127,9 @@ void InitSPIDisplay()
     // of it is displayed. Therefore if we wanted to swap row address mode above, writes to Y=0...239 range will actually land in
     // memory in row addresses Y = 319-(0...239) = 319...80 range. To view this range, we must scroll the view by +80 units in Y
     // direction so that contents of Y=80...319 is displayed instead of Y=0...239.
-    // if ((madctl & MADCTL_ROW_ADDRESS_ORDER_SWAP)) {
+    if ((madctl & MADCTL_ROW_ADDRESS_ORDER_SWAP)) {
         sendCmd(0x37 /*VSCSAD: Vertical Scroll Start Address of RAM*/, data, 4);
-    // }
+    }
 
     drawFillRect(0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, 0); // clear screen
 
@@ -195,6 +195,21 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
 
     w = surface->w > DISPLAY_WIDTH ? DISPLAY_WIDTH : surface->w;
     h = surface->h > DISPLAY_HEIGHT ? DISPLAY_HEIGHT : surface->h;
+    // for (x = 0; x < w; x++) {
+    //     for (y = 0; y < h; y++) {
+    //         pos = (y * surface->w + x) * surface->format->BytesPerPixel;
+    //         pixels = surface->pixels + pos;
+
+    //         rgb = (((pixels[0] >> 3) << 11) | ((pixels[1] >> 2) << 5) | (pixels[2] >> 3));
+    //         pixel[0] = (uint8_t)(rgb >> 8);
+    //         pixel[1] = (uint8_t)(rgb & 0xFF);
+
+    //         sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)x, (uint16_t)x);
+    //         sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
+    //         sendCmd(DISPLAY_WRITE_PIXELS, pixel, 2);
+    //     }
+    // }
+
     for (x = 0; x < w; x++) {
         for (y = 0; y < h; y++) {
             pos = (y * surface->w + x) * surface->format->BytesPerPixel;
@@ -204,7 +219,7 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
             pixel[0] = (uint8_t)(rgb >> 8);
             pixel[1] = (uint8_t)(rgb & 0xFF);
 
-            sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)x, (uint16_t)x);
+            sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)w-x, (uint16_t)w-x);
             sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
             sendCmd(DISPLAY_WRITE_PIXELS, pixel, 2);
         }
