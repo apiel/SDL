@@ -214,9 +214,9 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
             pixel[0] = pixels[0];
             pixel[1] = pixels[1];
 
-            sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)x, (uint16_t)x);
-            sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
-            sendCmd(DISPLAY_WRITE_PIXELS, pixel, 2);
+            // sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)x, (uint16_t)x);
+            // sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
+            // sendCmd(DISPLAY_WRITE_PIXELS, pixel, 2);
         }
     }
 
