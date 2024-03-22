@@ -167,6 +167,7 @@ int SDL_DUMMY_CreateWindowFramebuffer(_THIS, SDL_Window *window, Uint32 *format,
         return -1;
     }
 
+    // SDL_PIXELFORMAT_RGB888 => SDL_PIXELFORMAT_XRGB8888
     printf("............... Creating ST7789 window framebuffer w %d h %d BytesPerPixel %d format %d\n", w, h, surface->format->BytesPerPixel, surface->format->format);
 
     /* Save the info and return! */
@@ -201,7 +202,13 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
             pos = (y * surface->w + x) * surface->format->BytesPerPixel;
             pixels = surface->pixels + pos;
 
-            rgb = (((pixels[0] >> 3) << 11) | ((pixels[1] >> 2) << 5) | (pixels[2] >> 3));
+            // rgb = (((pixels[0] >> 3) << 11) | ((pixels[1] >> 2) << 5) | (pixels[2] >> 3));
+            // pixel[0] = (uint8_t)(rgb >> 8);
+            // pixel[1] = (uint8_t)(rgb & 0xFF);
+
+            SDL_Color color;
+            SDL_GetRGBA(pixels, surface->format, &color.r, &color.g, &color.b, &color.a);
+            rgb = (((color.r >> 3) << 11) | ((color.g >> 2) << 5) | (color.b >> 3));
             pixel[0] = (uint8_t)(rgb >> 8);
             pixel[1] = (uint8_t)(rgb & 0xFF);
 
