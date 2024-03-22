@@ -219,7 +219,13 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
             pixel[0] = (uint8_t)(rgb >> 8);
             pixel[1] = (uint8_t)(rgb & 0xFF);
 
-            sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)w-x, (uint16_t)w-x);
+            // sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)x, (uint16_t)x);
+            // sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
+            // let's swap x pos because of MADCTL_ROW_ADDRESS_ORDER_SWAP
+            // sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)w - x, (uint16_t)w - x);
+            // sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
+            // Let's rotate 90 degrees
+            sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)x, (uint16_t)x);
             sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)y, (uint16_t)y);
             sendCmd(DISPLAY_WRITE_PIXELS, pixel, 2);
         }
