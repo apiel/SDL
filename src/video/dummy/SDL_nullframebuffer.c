@@ -183,7 +183,8 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     SDL_Surface *surface;
     Uint8 *bits;
     int i, bw, pad, x, y;
-    uint16_t pixel;
+    uint8_t pixel[BYTESPERPIXEL];
+    int pos;
 
     surface = (SDL_Surface *)SDL_GetWindowData(window, DUMMY_SURFACE);
     if (!surface) {
@@ -198,17 +199,22 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     //     SDL_SaveBMP(surface, file);
     // }
 
-        // bits = (Uint8 *)surface->pixels + (surface->h * surface->pitch);
-        // // pad = ((bw % 4) ? (4 - (bw % 4)) : 0);
-        // // while (bits > (Uint8 *)surface->pixels) {
-        // //     bits -= surface->pitch;
-        // //     drawPixel(0, 0, 0);
-        // // }
+    // bits = (Uint8 *)surface->pixels + (surface->h * surface->pitch);
+    // // pad = ((bw % 4) ? (4 - (bw % 4)) : 0);
+    // // while (bits > (Uint8 *)surface->pixels) {
+    // //     bits -= surface->pitch;
+    // //     drawPixel(0, 0, 0);
+    // // }
 
     for (x = 0; x < surface->w; x++) {
         for (y = 0; y < surface->h; y++) {
-            pixel = surface->pixels[y * surface->pitch + x];
-            drawPixel(x, y, pixel);
+            pos = y * surface->pitch + x;
+            pixel[0] = surface->pixels[pos];
+            pixel[1] = surface->pixels[pos + 1];
+
+            sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)x, (uint16_t)x);
+            sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
+            sendCmd(DISPLAY_WRITE_PIXELS, pixel, 2);
         }
     }
 
