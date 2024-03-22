@@ -128,7 +128,7 @@ void InitSPIDisplay()
     // memory in row addresses Y = 319-(0...239) = 319...80 range. To view this range, we must scroll the view by +80 units in Y
     // direction so that contents of Y=80...319 is displayed instead of Y=0...239.
     // if ((madctl & MADCTL_ROW_ADDRESS_ORDER_SWAP)) {
-    //     sendCmd(0x37 /*VSCSAD: Vertical Scroll Start Address of RAM*/, data, 4);
+        sendCmd(0x37 /*VSCSAD: Vertical Scroll Start Address of RAM*/, data, 4);
     // }
 
     drawFillRect(0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, 0); // clear screen
