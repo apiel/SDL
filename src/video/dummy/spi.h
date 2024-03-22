@@ -143,12 +143,12 @@ void sendCmd(uint8_t cmd, uint8_t *payload, uint32_t payloadSize)
   WaitForPolledSPITransferToFinish();
 }
 
-void sendCmd(uint8_t cmd)
+void sendCmdOnly(uint8_t cmd)
 {
   sendCmd(cmd, NULL, 0);
 }
 
-void sendCmd(uint8_t cmd, uint8_t data)
+void sendCmdData(uint8_t cmd, uint8_t data)
 {
   sendCmd(cmd, &data, 1);
 }
