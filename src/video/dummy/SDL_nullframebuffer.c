@@ -127,9 +127,9 @@ void InitSPIDisplay()
     // of it is displayed. Therefore if we wanted to swap row address mode above, writes to Y=0...239 range will actually land in
     // memory in row addresses Y = 319-(0...239) = 319...80 range. To view this range, we must scroll the view by +80 units in Y
     // direction so that contents of Y=80...319 is displayed instead of Y=0...239.
-    if ((madctl & MADCTL_ROW_ADDRESS_ORDER_SWAP)) {
-        sendCmd(0x37 /*VSCSAD: Vertical Scroll Start Address of RAM*/, data, 4);
-    }
+    // if ((madctl & MADCTL_ROW_ADDRESS_ORDER_SWAP)) {
+    //     sendCmd(0x37 /*VSCSAD: Vertical Scroll Start Address of RAM*/, data, 4);
+    // }
 
     drawFillRect(0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, 0); // clear screen
 
