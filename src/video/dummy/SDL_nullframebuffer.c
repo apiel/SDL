@@ -177,8 +177,8 @@ int SDL_DUMMY_CreateWindowFramebuffer(_THIS, SDL_Window *window, Uint32 *format,
     return 0;
 }
 
-#define MY_RGB(r, g, b) (((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3))
-bool yodrawed = false;
+// #define MY_RGB(r, g, b) (((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3))
+// bool yodrawed = false;
 int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect *rects, int numrects)
 {
     static int frame_number;
@@ -233,7 +233,10 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
             // pixel[1] = pixels[2] & 0xFF | (pixels[3] & 0xFF) << 8;
 
             // rgb = ((pixels[0] & 0x0ff) << 16) | ((pixels[1] & 0x0ff) << 8) | (pixels[2] & 0x0ff);
-            rgb = MY_RGB(pixels[0], pixels[1], pixels[2]);
+            // rgb = MY_RGB(pixels[0], pixels[1], pixels[2]);
+            // (((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3))
+
+            rgb = (((pixels[0] >> 3) << 11) | ((pixels[1] >> 2) << 5) | (pixels[2] >> 3));
             pixel[0] = (uint8_t)(rgb >> 8);
             pixel[1] = (uint8_t)(rgb & 0xFF);
 
