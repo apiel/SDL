@@ -113,7 +113,7 @@ void InitSPIDisplay()
 #define ST7789_MADCTL_BGR 0x08
 
     madctl |= MADCTL_ROW_ADDRESS_ORDER_SWAP;
-    madctl |= ST7789_MADCTL_RGB;
+    madctl |= ST7789_MADCTL_BGR;
     madctl ^= MADCTL_ROTATE_180_DEGREES;
 
     sendCmdData(0x36 /*MADCTL: Memory Access Control*/, madctl);
