@@ -106,7 +106,7 @@ void sendCmd(uint8_t cmd, uint8_t *payload, uint32_t payloadSize)
 {
   int8_t *tStart;
   uint8_t *tEnd;
-  uint8_t *tEndPrefill;
+  uint8_t *tPrefillEnd;
   uint32_t cs;
 
   // WaitForPolledSPITransferToFinish();
@@ -132,7 +132,7 @@ void sendCmd(uint8_t cmd, uint8_t *payload, uint32_t payloadSize)
       spi->fifo = *tStart++;
     while (tStart < tEnd)
     {
-      uint32_t cs = spi->cs;
+      cs = spi->cs;
       if ((cs & BCM2835_SPI0_CS_TXD))
         spi->fifo = *tStart++;
       if ((cs & (BCM2835_SPI0_CS_RXR | BCM2835_SPI0_CS_RXF)))
@@ -145,7 +145,7 @@ void sendCmd(uint8_t cmd, uint8_t *payload, uint32_t payloadSize)
 
 void sendCmd(uint8_t cmd)
 {
-  sendCmd(cmd, nullptr, 0);
+  sendCmd(cmd, NULL, 0);
 }
 
 void sendCmd(uint8_t cmd, uint8_t data)
