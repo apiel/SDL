@@ -220,12 +220,13 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
         for (y = 0; y < surface->h; y++) {
             pos = y * surface->pitch + x;
             pixels = surface->pixels + pos;
-            pixel[0] = pixels[0];
-            pixel[1] = pixels[1];
+            // pixel[0] = pixels[0];
+            // pixel[1] = pixels[1];
 
-            // sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)x, (uint16_t)x);
-            // sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
+            sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)x, (uint16_t)x);
+            sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
             // sendCmd(DISPLAY_WRITE_PIXELS, pixel, 2);
+            sendCmd(DISPLAY_WRITE_PIXELS, pixels, 2);
         }
     }
 
