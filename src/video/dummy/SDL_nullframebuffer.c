@@ -25,6 +25,8 @@
 #include "../SDL_sysvideo.h"
 #include "SDL_nullframebuffer_c.h"
 
+#include "spi.h"
+
 #define DUMMY_SURFACE "_SDL_DummySurface"
 
 int SDL_DUMMY_CreateWindowFramebuffer(_THIS, SDL_Window *window, Uint32 *format, void **pixels, int *pitch)
