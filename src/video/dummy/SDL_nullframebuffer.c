@@ -157,10 +157,10 @@ int SDL_DUMMY_CreateWindowFramebuffer(_THIS, SDL_Window *window, Uint32 *format,
     printf("Initializing display\n");
     InitSPIDisplay();
 
-    printf("............................................. Creating dummy window framebuffer\n");
-
     /* Free the old framebuffer surface */
     SDL_DUMMY_DestroyWindowFramebuffer(_this, window);
+
+    printf("............................................. Creating dummy window framebuffer w %d h %d\n", w, h);
 
     /* Create a new one */
     SDL_GetWindowSizeInPixels(window, &w, &h);
@@ -177,8 +177,6 @@ int SDL_DUMMY_CreateWindowFramebuffer(_THIS, SDL_Window *window, Uint32 *format,
     return 0;
 }
 
-// #define MY_RGB(r, g, b) (((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3))
-// bool yodrawed = false;
 int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect *rects, int numrects)
 {
     static int frame_number;
@@ -195,46 +193,12 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
         return SDL_SetError("Couldn't find dummy surface for window");
     }
 
-    // /* Send the data to the display */
-    // if (SDL_getenv("SDL_VIDEO_DUMMY_SAVE_FRAMES")) {
-    //     char file[128];
-    //     (void)SDL_snprintf(file, sizeof(file), "SDL_window_yoyoyo_%" SDL_PRIu32 "-%8.8d.bmp",
-    //                        SDL_GetWindowID(window), ++frame_number);
-    //     SDL_SaveBMP(surface, file);
-    // }
-
-    // bits = (Uint8 *)surface->pixels + (surface->h * surface->pitch);
-    // // pad = ((bw % 4) ? (4 - (bw % 4)) : 0);
-    // // while (bits > (Uint8 *)surface->pixels) {
-    // //     bits -= surface->pitch;
-    // //     drawPixel(0, 0, 0);
-    // // }
-
-    // printf("Updating framebuffer BytesPerPixel: %d\n", surface->format->BytesPerPixel);
-    // if (!yodrawed) {
-    //     drawFillRect(20, 40, 20, 20, 0xFF00FF);
-    // } else {
-    //     drawFillRect(20, 40, 20, 20, 0x00FF00);
-    // }
-    // yodrawed = !yodrawed;
-
     w = surface->w > DISPLAY_WIDTH ? DISPLAY_WIDTH : surface->w;
     h = surface->h > DISPLAY_HEIGHT ? DISPLAY_HEIGHT : surface->h;
     for (x = 0; x < w; x++) {
         for (y = 0; y < h; y++) {
-            // pos = y * surface->pitch + x ;
             pos = (y * surface->w + x) * surface->format->BytesPerPixel;
             pixels = surface->pixels + pos;
-            // pixel[0] = pixels[0];
-            // pixel[1] = pixels[1];
-
-            // // Convert uint32 to uint16
-            // pixel[0] = pixels[0] & 0xFF | (pixels[1] & 0xFF) << 8;
-            // pixel[1] = pixels[2] & 0xFF | (pixels[3] & 0xFF) << 8;
-
-            // rgb = ((pixels[0] & 0x0ff) << 16) | ((pixels[1] & 0x0ff) << 8) | (pixels[2] & 0x0ff);
-            // rgb = MY_RGB(pixels[0], pixels[1], pixels[2]);
-            // (((r >> 3) << 11) | ((g >> 2) << 5) | (b >> 3))
 
             rgb = (((pixels[0] >> 3) << 11) | ((pixels[1] >> 2) << 5) | (pixels[2] >> 3));
             pixel[0] = (uint8_t)(rgb >> 8);
@@ -243,7 +207,6 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
             sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)x, (uint16_t)x);
             sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
             sendCmd(DISPLAY_WRITE_PIXELS, pixel, 2);
-            // sendCmd(DISPLAY_WRITE_PIXELS, pixels, 2);
         }
     }
 
