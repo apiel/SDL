@@ -188,6 +188,7 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     int pos;
     uint8_t *pixels;
     uint16_t rgb;
+    SDL_Color color;
 
     surface = (SDL_Surface *)SDL_GetWindowData(window, DUMMY_SURFACE);
     if (!surface) {
@@ -206,7 +207,6 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
             // pixel[0] = (uint8_t)(rgb >> 8);
             // pixel[1] = (uint8_t)(rgb & 0xFF);
 
-            SDL_Color color;
             SDL_GetRGBA(pixels, surface->format, &color.r, &color.g, &color.b, &color.a);
             rgb = (((color.r >> 3) << 11) | ((color.g >> 2) << 5) | (color.b >> 3));
             pixel[0] = (uint8_t)(rgb >> 8);
