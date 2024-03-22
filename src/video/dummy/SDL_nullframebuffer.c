@@ -208,7 +208,7 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     // //     drawPixel(0, 0, 0);
     // // }
 
-    // printf("Updating framebuffer\n");
+    printf("Updating framebuffer BytesPerPixel: %d\n", surface->format->BytesPerPixel);
     // if (!yodrawed) {
     //     drawFillRect(20, 40, 20, 20, 0xFF00FF);
     // } else {
