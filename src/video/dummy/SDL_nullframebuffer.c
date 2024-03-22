@@ -177,6 +177,7 @@ int SDL_DUMMY_CreateWindowFramebuffer(_THIS, SDL_Window *window, Uint32 *format,
     return 0;
 }
 
+bool yodrawed = false;
 int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect *rects, int numrects)
 {
     static int frame_number;
@@ -206,6 +207,13 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     // //     bits -= surface->pitch;
     // //     drawPixel(0, 0, 0);
     // // }
+
+    if (!yodrawed) {
+        drawFillRect(20, 40, 20, 20, 0xFF00FF);
+    } else {
+        drawFillRect(20, 40, 20, 20, 0x00FF00);
+    }
+    yodrawed = !yodrawed;
 
     for (x = 0; x < surface->w; x++) {
         for (y = 0; y < surface->h; y++) {
