@@ -183,6 +183,7 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     SDL_Surface *surface;
     Uint8 *bits;
     int i, bw, pad, x, y;
+    uint16_t pixel;
 
     surface = (SDL_Surface *)SDL_GetWindowData(window, DUMMY_SURFACE);
     if (!surface) {
@@ -206,7 +207,7 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
 
     for (x = 0; x < surface->w; x++) {
         for (y = 0; y < surface->h; y++) {
-            uint16_t pixel = surface->pixels[y * surface->pitch + x];
+            pixel = surface->pixels[y * surface->pitch + x];
             drawPixel(x, y, pixel);
         }
     }
