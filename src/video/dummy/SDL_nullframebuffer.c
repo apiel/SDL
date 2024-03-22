@@ -152,6 +152,11 @@ int SDL_DUMMY_CreateWindowFramebuffer(_THIS, SDL_Window *window, Uint32 *format,
     const Uint32 surface_format = SDL_PIXELFORMAT_RGB888;
     int w, h;
 
+    InitSPI();
+
+    printf("Initializing display\n");
+    InitSPIDisplay();
+
     printf("............................................. Creating dummy window framebuffer\n");
 
     /* Free the old framebuffer surface */
@@ -198,6 +203,9 @@ void SDL_DUMMY_DestroyWindowFramebuffer(_THIS, SDL_Window *window)
 
     surface = (SDL_Surface *)SDL_SetWindowData(window, DUMMY_SURFACE, NULL);
     SDL_FreeSurface(surface);
+
+    DeinitSPI();
+    printf("Quit.\n");
 }
 
 #endif /* SDL_VIDEO_DRIVER_DUMMY */
