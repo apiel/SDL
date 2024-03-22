@@ -108,8 +108,12 @@ void InitSPIDisplay()
 #define MADCTL_COLUMN_ADDRESS_ORDER_SWAP (1 << 6)
 #define MADCTL_ROW_ADDRESS_ORDER_SWAP    (1 << 7)
 #define MADCTL_ROTATE_180_DEGREES        (MADCTL_COLUMN_ADDRESS_ORDER_SWAP | MADCTL_ROW_ADDRESS_ORDER_SWAP)
+/* RGB/BGR Order ('0' = RGB, '1' = BGR) */
+#define ST7789_MADCTL_RGB 0x00
+#define ST7789_MADCTL_BGR 0x08
 
     madctl |= MADCTL_ROW_ADDRESS_ORDER_SWAP;
+    madctl |= ST7789_MADCTL_RGB;
     madctl ^= MADCTL_ROTATE_180_DEGREES;
 
     sendCmdData(0x36 /*MADCTL: Memory Access Control*/, madctl);
@@ -204,8 +208,7 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
             pixels = surface->pixels + pos;
 
             // rgb = (((pixels[0] >> 3) << 11) | ((pixels[1] >> 2) << 5) | (pixels[2] >> 3));
-            // rgb = ((pixels[0] & 0xF8) << 8) | ((pixels[1] & 0xFC) << 3) | (pixels[2] >> 3);
-            rgb = (((pixels[0]) << 11) | ((pixels[1]) << 5) | (pixels[2]));
+            rgb = ((pixels[0] & 0xF8) << 8) | ((pixels[1] & 0xFC) << 3) | (pixels[2] >> 3);
             pixel[0] = (uint8_t)(rgb >> 8);
             pixel[1] = (uint8_t)(rgb & 0xFF);
 
