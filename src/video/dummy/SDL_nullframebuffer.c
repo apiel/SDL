@@ -160,14 +160,14 @@ int SDL_DUMMY_CreateWindowFramebuffer(_THIS, SDL_Window *window, Uint32 *format,
     /* Free the old framebuffer surface */
     SDL_DUMMY_DestroyWindowFramebuffer(_this, window);
 
-    printf("............................................. Creating dummy window framebuffer w %d h %d\n", w, h);
-
     /* Create a new one */
     SDL_GetWindowSizeInPixels(window, &w, &h);
     surface = SDL_CreateRGBSurfaceWithFormat(0, w, h, 0, surface_format);
     if (!surface) {
         return -1;
     }
+
+    printf("............................................. Creating dummy window framebuffer w %d h %d\n", w, h);
 
     /* Save the info and return! */
     SDL_SetWindowData(window, DUMMY_SURFACE, surface);
