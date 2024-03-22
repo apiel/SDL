@@ -167,7 +167,7 @@ int SDL_DUMMY_CreateWindowFramebuffer(_THIS, SDL_Window *window, Uint32 *format,
         return -1;
     }
 
-    printf("............................................. Creating dummy window framebuffer w %d h %d\n", w, h);
+    printf("............... Creating ST7789 window framebuffer w %d h %d BytesPerPixel %d format %d\n", w, h, surface->format->BytesPerPixel, surface->format->format);
 
     /* Save the info and return! */
     SDL_SetWindowData(window, DUMMY_SURFACE, surface);
@@ -195,20 +195,6 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
 
     w = surface->w > DISPLAY_WIDTH ? DISPLAY_WIDTH : surface->w;
     h = surface->h > DISPLAY_HEIGHT ? DISPLAY_HEIGHT : surface->h;
-    // for (x = 0; x < w; x++) {
-    //     for (y = 0; y < h; y++) {
-    //         pos = (y * surface->w + x) * surface->format->BytesPerPixel;
-    //         pixels = surface->pixels + pos;
-
-    //         rgb = (((pixels[0] >> 3) << 11) | ((pixels[1] >> 2) << 5) | (pixels[2] >> 3));
-    //         pixel[0] = (uint8_t)(rgb >> 8);
-    //         pixel[1] = (uint8_t)(rgb & 0xFF);
-
-    //         sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)x, (uint16_t)x);
-    //         sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
-    //         sendCmd(DISPLAY_WRITE_PIXELS, pixel, 2);
-    //     }
-    // }
 
     for (x = 0; x < w; x++) {
         for (y = 0; y < h; y++) {
