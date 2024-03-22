@@ -208,7 +208,7 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     // //     drawPixel(0, 0, 0);
     // // }
 
-    printf("Updating framebuffer BytesPerPixel: %d\n", surface->format->BytesPerPixel);
+    // printf("Updating framebuffer BytesPerPixel: %d\n", surface->format->BytesPerPixel);
     // if (!yodrawed) {
     //     drawFillRect(20, 40, 20, 20, 0xFF00FF);
     // } else {
@@ -226,10 +226,14 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
             // pixel[0] = pixels[0];
             // pixel[1] = pixels[1];
 
+            // Convert uint32 to uint16
+            pixel[0] = pixels[0] & 0xFF | (pixels[1] & 0xFF) << 8;
+            pixel[1] = pixels[2] & 0xFF | (pixels[3] & 0xFF) << 8;
+
             sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)x, (uint16_t)x);
             sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
-            // sendCmd(DISPLAY_WRITE_PIXELS, pixel, 2);
-            sendCmd(DISPLAY_WRITE_PIXELS, pixels, 2);
+            sendCmd(DISPLAY_WRITE_PIXELS, pixel, 2);
+            // sendCmd(DISPLAY_WRITE_PIXELS, pixels, 2);
         }
     }
 
