@@ -183,7 +183,7 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     static int frame_number;
     SDL_Surface *surface;
     Uint8 *bits;
-    int i, bw, pad, x, y;
+    int i, bw, pad, x, y, w, h;
     uint8_t pixel[BYTESPERPIXEL];
     int pos;
     uint8_t *pixels;
@@ -208,16 +208,18 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     // //     drawPixel(0, 0, 0);
     // // }
 
-    printf("Updating framebuffer\n");
-    if (!yodrawed) {
-        drawFillRect(20, 40, 20, 20, 0xFF00FF);
-    } else {
-        drawFillRect(20, 40, 20, 20, 0x00FF00);
-    }
-    yodrawed = !yodrawed;
+    // printf("Updating framebuffer\n");
+    // if (!yodrawed) {
+    //     drawFillRect(20, 40, 20, 20, 0xFF00FF);
+    // } else {
+    //     drawFillRect(20, 40, 20, 20, 0x00FF00);
+    // }
+    // yodrawed = !yodrawed;
 
-    for (x = 0; x < surface->w; x++) {
-        for (y = 0; y < surface->h; y++) {
+    w = surface->w > DISPLAY_WIDTH ? DISPLAY_WIDTH : surface->w;
+    h = surface->h > DISPLAY_HEIGHT ? DISPLAY_HEIGHT : surface->h;
+    for (x = 0; x < w; x++) {
+        for (y = 0; y < h; y++) {
             pos = y * surface->pitch + x;
             pixels = surface->pixels + pos;
             // pixel[0] = pixels[0];
@@ -239,9 +241,6 @@ void SDL_DUMMY_DestroyWindowFramebuffer(_THIS, SDL_Window *window)
 
     surface = (SDL_Surface *)SDL_SetWindowData(window, DUMMY_SURFACE, NULL);
     SDL_FreeSurface(surface);
-
-    // DeinitSPI();
-    // printf("Quit.\n");
 }
 
 #endif /* SDL_VIDEO_DRIVER_DUMMY */
