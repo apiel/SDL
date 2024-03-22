@@ -104,6 +104,11 @@ void WaitForPolledSPITransferToFinish()
 
 void sendCmd(uint8_t cmd, uint8_t *payload, uint32_t payloadSize)
 {
+  int8_t *tStart;
+  uint8_t *tEnd;
+  uint8_t *tEndPrefill;
+  uint32_t cs;
+
   // WaitForPolledSPITransferToFinish();
 
   spi->cs = BCM2835_SPI0_CS_TA | DISPLAY_SPI_DRIVE_SETTINGS; // Spi begins transfer
@@ -119,10 +124,9 @@ void sendCmd(uint8_t cmd, uint8_t *payload, uint32_t payloadSize)
   {
     SET_GPIO(GPIO_TFT_DATA_CONTROL);
 
-    uint8_t *tStart = payload;
-    uint8_t *tEnd = payload + payloadSize;
-    // uint8_t *tPrefillEnd = tStart + MIN(15, payloadSize);
-    uint8_t *tPrefillEnd = tStart + (payloadSize > 15 ? 15 : payloadSize);
+    tStart = payload;
+    tEnd = payload + payloadSize;
+    tPrefillEnd = tStart + (payloadSize > 15 ? 15 : payloadSize);
 
     while (tStart < tPrefillEnd)
       spi->fifo = *tStart++;
