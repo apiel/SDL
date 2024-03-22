@@ -181,19 +181,36 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
 {
     static int frame_number;
     SDL_Surface *surface;
+    Uint8 *bits;
+    int i, bw, pad, x, y;
 
     surface = (SDL_Surface *)SDL_GetWindowData(window, DUMMY_SURFACE);
     if (!surface) {
         return SDL_SetError("Couldn't find dummy surface for window");
     }
 
-    /* Send the data to the display */
-    if (SDL_getenv("SDL_VIDEO_DUMMY_SAVE_FRAMES")) {
-        char file[128];
-        (void)SDL_snprintf(file, sizeof(file), "SDL_window_yoyoyo_%" SDL_PRIu32 "-%8.8d.bmp",
-                           SDL_GetWindowID(window), ++frame_number);
-        SDL_SaveBMP(surface, file);
+    // /* Send the data to the display */
+    // if (SDL_getenv("SDL_VIDEO_DUMMY_SAVE_FRAMES")) {
+    //     char file[128];
+    //     (void)SDL_snprintf(file, sizeof(file), "SDL_window_yoyoyo_%" SDL_PRIu32 "-%8.8d.bmp",
+    //                        SDL_GetWindowID(window), ++frame_number);
+    //     SDL_SaveBMP(surface, file);
+    // }
+
+        // bits = (Uint8 *)surface->pixels + (surface->h * surface->pitch);
+        // // pad = ((bw % 4) ? (4 - (bw % 4)) : 0);
+        // // while (bits > (Uint8 *)surface->pixels) {
+        // //     bits -= surface->pitch;
+        // //     drawPixel(0, 0, 0);
+        // // }
+
+    for (x = 0; x < surface->w; x++) {
+        for (y = 0; y < surface->h; y++) {
+            uint16_t pixel = (uint16_t)surface->pixels[y * surface->pitch + x];
+            drawPixel(x, y, pixel);
+        }
     }
+
     return 0;
 }
 
