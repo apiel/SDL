@@ -279,8 +279,6 @@ void SDL_DUMMY_VideoQuit(_THIS)
     printf("dummy quit\n");
     sendCmdOnly(/*Display OFF*/ 0x28);
     DeinitSPI();
-
-    SDL_QuitBeApp();
 }
 
 #endif /* SDL_VIDEO_DRIVER_DUMMY */
