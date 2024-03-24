@@ -236,23 +236,7 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     //     }
     // }
 
-    // // draw row by row
-    // for (y = 0; y < h; y++) {
-    //     for (x = 0; x < w; x++) {
-    //         pos = (y * surface->w + x) * surface->format->BytesPerPixel;
-    //         pixels = surface->pixels + pos;
-
-    //         // rgb = (((pixels[0] >> 3) << 11) | ((pixels[1] >> 2) << 5) | (pixels[2] >> 3));
-    //         rgb = ((pixels[0] & 0xF8) << 8) | ((pixels[1] & 0xFC) << 3) | (pixels[2] >> 3);
-    //         pixelsBuffer[x] = (uint8_t)(rgb >> 8);
-    //         pixelsBuffer[x + 1] = (uint8_t)(rgb & 0xFF);
-    //     }
-
-    //     sendAddr(DISPLAY_SET_CURSOR_Y, 0, w - 1);
-    //     sendAddr(DISPLAY_SET_CURSOR_X, y, y);
-    //     sendCmd(DISPLAY_WRITE_PIXELS, pixelsBuffer, size);
-    // }
-
+    // draw row by row
     for (x = 0; x < w; x++) {
         for (y = 0; y < h; y++) {
             pos = (y * surface->w + x) * surface->format->BytesPerPixel;
@@ -260,13 +244,13 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
 
             // rgb = (((pixels[0] >> 3) << 11) | ((pixels[1] >> 2) << 5) | (pixels[2] >> 3));
             rgb = ((pixels[0] & 0xF8) << 8) | ((pixels[1] & 0xFC) << 3) | (pixels[2] >> 3);
-            pixelsBuffer[y] = (uint8_t)(rgb >> 8);
-            pixelsBuffer[y + 1] = (uint8_t)(rgb & 0xFF);
+            pixelsBuffer[(y * BYTESPERPIXEL)] = (uint8_t)(rgb >> 8);
+            pixelsBuffer[(y * BYTESPERPIXEL) + 1] = (uint8_t)(rgb & 0xFF);
         }
 
         // Let's rotate 90 degrees
         sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)x, (uint16_t)x);
-        sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)0, size);
+        sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)0, (uint16_t)h - 1);
         sendCmd(DISPLAY_WRITE_PIXELS, pixelsBuffer, size);
     }
 
