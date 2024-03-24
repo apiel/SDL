@@ -274,8 +274,8 @@ void SDL_DUMMY_VideoQuit(_THIS)
 {
     printf("dummy quit\n");
     sendCmdOnly(/*Display OFF*/ 0x28);
-    DeinitSPI();
     CLEAR_GPIO(GPIO_TFT_BACKLIGHT);
+    DeinitSPI();
 }
 
 #endif /* SDL_VIDEO_DRIVER_DUMMY */
