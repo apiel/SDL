@@ -264,9 +264,14 @@ void SDL_DUMMY_DestroyWindowFramebuffer(_THIS, SDL_Window *window)
     surface = (SDL_Surface *)SDL_SetWindowData(window, DUMMY_SURFACE, NULL);
     SDL_FreeSurface(surface);
 
-    printf("DestroyWindowFramebuffer\n");
-    // sendCmdOnly(/*Display OFF*/ 0x28);
-    // DeinitSPI();
+    // printf("DestroyWindowFramebuffer\n");
+}
+
+void SDL_DUMMY_DestroyWindow(_THIS, SDL_Window *window)
+{
+    printf("destroy window\n");
+    sendCmdOnly(/*Display OFF*/ 0x28);
+    DeinitSPI();
 }
 
 #endif /* SDL_VIDEO_DRIVER_DUMMY */
