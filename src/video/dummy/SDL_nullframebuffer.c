@@ -144,8 +144,8 @@ void InitSPIDisplay()
     usleep(10 * 1000); // Delay a bit before restoring CLK, or otherwise this has been observed to cause the display not init if done back to back after the clear operation above.
     spi->clk = SPI_BUS_CLOCK_DIVISOR;
 
-    printf("draw stuff\n");
-    drawStuff();
+    // printf("draw stuff\n");
+    // drawStuff();
 }
 
 #define DUMMY_SURFACE "_SDL_DummySurface"
@@ -193,6 +193,8 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     uint8_t *pixels;
     uint16_t rgb;
     SDL_Color color;
+    uint16_t size;
+    uint8_t pixels[2048];
 
     surface = (SDL_Surface *)SDL_GetWindowData(window, DUMMY_SURFACE);
     if (!surface) {
@@ -202,32 +204,70 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     w = surface->w > DISPLAY_WIDTH ? DISPLAY_WIDTH : surface->w;
     h = surface->h > DISPLAY_HEIGHT ? DISPLAY_HEIGHT : surface->h;
 
-    for (x = 0; x < w; x++) {
-        for (y = 0; y < h; y++) {
+    size = w * BYTESPERPIXEL;
+    if (size > sizeof(pixels)) {
+        return SDL_SetError("pixels buffer too small");
+    }
+
+    // for (x = 0; x < w; x++) {
+    //     for (y = 0; y < h; y++) {
+    //         pos = (y * surface->w + x) * surface->format->BytesPerPixel;
+    //         pixels = surface->pixels + pos;
+
+    //         // rgb = (((pixels[0] >> 3) << 11) | ((pixels[1] >> 2) << 5) | (pixels[2] >> 3));
+    //         rgb = ((pixels[0] & 0xF8) << 8) | ((pixels[1] & 0xFC) << 3) | (pixels[2] >> 3);
+    //         pixel[0] = (uint8_t)(rgb >> 8);
+    //         pixel[1] = (uint8_t)(rgb & 0xFF);
+
+    //         // SDL_GetRGBA(pixels, surface->format, &color.r, &color.g, &color.b, &color.a);
+    //         // rgb = (((color.r >> 3) << 11) | ((color.g >> 2) << 5) | (color.b >> 3));
+    //         // pixel[0] = (uint8_t)(rgb >> 8);
+    //         // pixel[1] = (uint8_t)(rgb & 0xFF);
+
+    //         // sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)x, (uint16_t)x);
+    //         // sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
+    //         // let's swap x pos because of MADCTL_ROW_ADDRESS_ORDER_SWAP
+    //         // sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)w - x, (uint16_t)w - x);
+    //         // sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
+    //         // Let's rotate 90 degrees
+    //         sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)x, (uint16_t)x);
+    //         sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)y, (uint16_t)y);
+    //         sendCmd(DISPLAY_WRITE_PIXELS, pixel, 2);
+    //     }
+    // }
+
+    // draw row by row
+    for (y = 0; y < h; y++) {
+        for (x = 0; x < w; x++) {
             pos = (y * surface->w + x) * surface->format->BytesPerPixel;
             pixels = surface->pixels + pos;
 
             // rgb = (((pixels[0] >> 3) << 11) | ((pixels[1] >> 2) << 5) | (pixels[2] >> 3));
             rgb = ((pixels[0] & 0xF8) << 8) | ((pixels[1] & 0xFC) << 3) | (pixels[2] >> 3);
-            pixel[0] = (uint8_t)(rgb >> 8);
-            pixel[1] = (uint8_t)(rgb & 0xFF);
-
-            // SDL_GetRGBA(pixels, surface->format, &color.r, &color.g, &color.b, &color.a);
-            // rgb = (((color.r >> 3) << 11) | ((color.g >> 2) << 5) | (color.b >> 3));
-            // pixel[0] = (uint8_t)(rgb >> 8);
-            // pixel[1] = (uint8_t)(rgb & 0xFF);
-
-            // sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)x, (uint16_t)x);
-            // sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
-            // let's swap x pos because of MADCTL_ROW_ADDRESS_ORDER_SWAP
-            // sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)w - x, (uint16_t)w - x);
-            // sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
-            // Let's rotate 90 degrees
-            sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)x, (uint16_t)x);
-            sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)y, (uint16_t)y);
-            sendCmd(DISPLAY_WRITE_PIXELS, pixel, 2);
+            pixels[i] = (uint8_t)(rgb >> 8);
+            pixels[i + 1] = (uint8_t)(rgb & 0xFF);
         }
+
+        sendAddr(DISPLAY_SET_CURSOR_X, 0, w - 1);
+        sendAddr(DISPLAY_SET_CURSOR_Y, y, y);
+        sendCmd(DISPLAY_WRITE_PIXELS, pixels, size);
     }
+
+    //     int yPos;
+    // uint16_t size = w * BYTESPERPIXEL;
+    // uint8_t pixels[size];
+    // uint8_t pixel[BYTESPERPIXEL] = { color >> 8, color & 0xFF };
+
+    // for (uint16_t i = 0; i < size; i += BYTESPERPIXEL) {
+    //     pixels[i] = pixel[0];
+    //     pixels[i + 1] = pixel[1];
+    // }
+
+    // for (yPos = 0; yPos < h; ++yPos) {
+    //     sendAddr(DISPLAY_SET_CURSOR_X, x, x + w);
+    //     sendAddr(DISPLAY_SET_CURSOR_Y, y + yPos, y + yPos);
+    //     sendCmd(DISPLAY_WRITE_PIXELS, pixels, size);
+    // }
 
     return 0;
 }
