@@ -205,7 +205,7 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     h = surface->h > DISPLAY_HEIGHT ? DISPLAY_HEIGHT : surface->h;
 
     size = w * BYTESPERPIXEL;
-    if (size > sizeof(pixels)) {
+    if (size > sizeof(pixelsBuffer)) {
         return SDL_SetError("pixels buffer too small");
     }
 
