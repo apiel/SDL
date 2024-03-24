@@ -266,7 +266,7 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
 
         // Let's rotate 90 degrees
         sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)x, (uint16_t)x);
-        sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)0, (uint16_t)h - 1);
+        sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)0, size);
         sendCmd(DISPLAY_WRITE_PIXELS, pixelsBuffer, size);
     }
 
