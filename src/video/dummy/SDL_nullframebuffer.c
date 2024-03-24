@@ -137,6 +137,9 @@ void InitSPIDisplay()
 
     drawFillRect(0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, 0); // clear screen
 
+    SET_GPIO_MODE(GPIO_TFT_BACKLIGHT, 1);
+    SET_GPIO(GPIO_TFT_BACKLIGHT);
+
     sendCmdOnly(/*Display ON*/ 0x29);
     usleep(100 * 1000);
 
@@ -267,18 +270,12 @@ void SDL_DUMMY_DestroyWindowFramebuffer(_THIS, SDL_Window *window)
     // printf("DestroyWindowFramebuffer\n");
 }
 
-void SDL_DUMMY_DestroyWindow(_THIS, SDL_Window *window)
-{
-    printf("destroy window\n");
-    sendCmdOnly(/*Display OFF*/ 0x28);
-    DeinitSPI();
-}
-
 void SDL_DUMMY_VideoQuit(_THIS)
 {
     printf("dummy quit\n");
     sendCmdOnly(/*Display OFF*/ 0x28);
     DeinitSPI();
+    CLEAR_GPIO(GPIO_TFT_BACKLIGHT);
 }
 
 #endif /* SDL_VIDEO_DRIVER_DUMMY */
