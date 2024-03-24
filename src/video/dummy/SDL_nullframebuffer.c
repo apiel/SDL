@@ -236,38 +236,39 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     //     }
     // }
 
-    // draw row by row
-    for (y = 0; y < h; y++) {
-        for (x = 0; x < w; x++) {
+    // // draw row by row
+    // for (y = 0; y < h; y++) {
+    //     for (x = 0; x < w; x++) {
+    //         pos = (y * surface->w + x) * surface->format->BytesPerPixel;
+    //         pixels = surface->pixels + pos;
+
+    //         // rgb = (((pixels[0] >> 3) << 11) | ((pixels[1] >> 2) << 5) | (pixels[2] >> 3));
+    //         rgb = ((pixels[0] & 0xF8) << 8) | ((pixels[1] & 0xFC) << 3) | (pixels[2] >> 3);
+    //         pixelsBuffer[x] = (uint8_t)(rgb >> 8);
+    //         pixelsBuffer[x + 1] = (uint8_t)(rgb & 0xFF);
+    //     }
+
+    //     sendAddr(DISPLAY_SET_CURSOR_Y, 0, w - 1);
+    //     sendAddr(DISPLAY_SET_CURSOR_X, y, y);
+    //     sendCmd(DISPLAY_WRITE_PIXELS, pixelsBuffer, size);
+    // }
+
+    for (x = 0; x < w; x++) {
+        for (y = 0; y < h; y++) {
             pos = (y * surface->w + x) * surface->format->BytesPerPixel;
             pixels = surface->pixels + pos;
 
             // rgb = (((pixels[0] >> 3) << 11) | ((pixels[1] >> 2) << 5) | (pixels[2] >> 3));
             rgb = ((pixels[0] & 0xF8) << 8) | ((pixels[1] & 0xFC) << 3) | (pixels[2] >> 3);
-            pixelsBuffer[x] = (uint8_t)(rgb >> 8);
-            pixelsBuffer[x + 1] = (uint8_t)(rgb & 0xFF);
+            pixelsBuffer[y] = (uint8_t)(rgb >> 8);
+            pixel[y + 1] = (uint8_t)(rgb & 0xFF);
         }
 
-        sendAddr(DISPLAY_SET_CURSOR_Y, 0, w - 1);
-        sendAddr(DISPLAY_SET_CURSOR_X, y, y);
+        // Let's rotate 90 degrees
+        sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)x, (uint16_t)x);
+        sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)0, (uint16_t)h);
         sendCmd(DISPLAY_WRITE_PIXELS, pixelsBuffer, size);
     }
-
-    //     int yPos;
-    // uint16_t size = w * BYTESPERPIXEL;
-    // uint8_t pixels[size];
-    // uint8_t pixel[BYTESPERPIXEL] = { color >> 8, color & 0xFF };
-
-    // for (uint16_t i = 0; i < size; i += BYTESPERPIXEL) {
-    //     pixels[i] = pixel[0];
-    //     pixels[i + 1] = pixel[1];
-    // }
-
-    // for (yPos = 0; yPos < h; ++yPos) {
-    //     sendAddr(DISPLAY_SET_CURSOR_X, x, x + w);
-    //     sendAddr(DISPLAY_SET_CURSOR_Y, y + yPos, y + yPos);
-    //     sendCmd(DISPLAY_WRITE_PIXELS, pixels, size);
-    // }
 
     return 0;
 }
