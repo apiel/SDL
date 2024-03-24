@@ -194,7 +194,7 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
     uint16_t rgb;
     SDL_Color color;
     uint16_t size;
-    uint8_t pixels[2048];
+    uint8_t pixelsBuffer[2048];
 
     surface = (SDL_Surface *)SDL_GetWindowData(window, DUMMY_SURFACE);
     if (!surface) {
@@ -244,13 +244,13 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
 
             // rgb = (((pixels[0] >> 3) << 11) | ((pixels[1] >> 2) << 5) | (pixels[2] >> 3));
             rgb = ((pixels[0] & 0xF8) << 8) | ((pixels[1] & 0xFC) << 3) | (pixels[2] >> 3);
-            pixels[i] = (uint8_t)(rgb >> 8);
-            pixels[i + 1] = (uint8_t)(rgb & 0xFF);
+            pixelsBuffer[i] = (uint8_t)(rgb >> 8);
+            pixelsBuffer[i + 1] = (uint8_t)(rgb & 0xFF);
         }
 
         sendAddr(DISPLAY_SET_CURSOR_X, 0, w - 1);
         sendAddr(DISPLAY_SET_CURSOR_Y, y, y);
-        sendCmd(DISPLAY_WRITE_PIXELS, pixels, size);
+        sendCmd(DISPLAY_WRITE_PIXELS, pixelsBuffer, size);
     }
 
     //     int yPos;
