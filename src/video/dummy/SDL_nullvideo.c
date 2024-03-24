@@ -114,7 +114,7 @@ static SDL_VideoDevice *DUMMY_CreateDevice(void)
     device->DestroyWindowFramebuffer = SDL_DUMMY_DestroyWindowFramebuffer;
 
     // device->DestroyWindow = SDL_DUMMY_DestroyWindow;
-    device->free = SDL_DUMMY_Free;
+    device->VideoQuit = SDL_DUMMY_VideoQuit;
 
     device->free = DUMMY_DeleteDevice;
 

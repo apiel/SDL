@@ -274,11 +274,13 @@ void SDL_DUMMY_DestroyWindow(_THIS, SDL_Window *window)
     DeinitSPI();
 }
 
-void SDL_DUMMY_Free(SDL_VideoDevice * device)
+void SDL_DUMMY_VideoQuit(_THIS)
 {
-    printf("dummy free\n");
+    printf("dummy quit\n");
     sendCmdOnly(/*Display OFF*/ 0x28);
     DeinitSPI();
+
+    SDL_QuitBeApp();
 }
 
 #endif /* SDL_VIDEO_DRIVER_DUMMY */
