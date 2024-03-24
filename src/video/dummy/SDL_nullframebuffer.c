@@ -274,6 +274,13 @@ void SDL_DUMMY_DestroyWindow(_THIS, SDL_Window *window)
     DeinitSPI();
 }
 
+void SDL_DUMMY_Free(SDL_VideoDevice * device)
+{
+    printf("dummy free\n");
+    sendCmdOnly(/*Display OFF*/ 0x28);
+    DeinitSPI();
+}
+
 #endif /* SDL_VIDEO_DRIVER_DUMMY */
 
 /* vi: set ts=4 sw=4 expandtab: */
