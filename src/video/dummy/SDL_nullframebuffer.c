@@ -263,6 +263,9 @@ void SDL_DUMMY_DestroyWindowFramebuffer(_THIS, SDL_Window *window)
 
     surface = (SDL_Surface *)SDL_SetWindowData(window, DUMMY_SURFACE, NULL);
     SDL_FreeSurface(surface);
+
+    sendCmdOnly(/*Display OFF*/ 0x28);
+    DeinitSPI();
 }
 
 #endif /* SDL_VIDEO_DRIVER_DUMMY */
