@@ -244,8 +244,8 @@ int SDL_DUMMY_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect 
 
             // rgb = (((pixels[0] >> 3) << 11) | ((pixels[1] >> 2) << 5) | (pixels[2] >> 3));
             rgb = ((pixels[0] & 0xF8) << 8) | ((pixels[1] & 0xFC) << 3) | (pixels[2] >> 3);
-            pixelsBuffer[i] = (uint8_t)(rgb >> 8);
-            pixelsBuffer[i + 1] = (uint8_t)(rgb & 0xFF);
+            pixelsBuffer[x] = (uint8_t)(rgb >> 8);
+            pixelsBuffer[x + 1] = (uint8_t)(rgb & 0xFF);
         }
 
         sendAddr(DISPLAY_SET_CURSOR_X, 0, w - 1);
