@@ -36,10 +36,10 @@ extern volatile GPIORegisterFile *gpio;
 #define SET_GPIO(pin) gpio->gpset[0] = 1 << (pin)     // Pin must be (0-31)
 #define CLEAR_GPIO(pin) gpio->gpclr[0] = 1 << (pin)   // Pin must be (0-31)
 
-void sendCmd(uint8_t cmd, uint8_t *payload, uint32_t payloadSize);
-void sendCmdOnly(uint8_t cmd);
-void sendCmdData(uint8_t cmd, uint8_t data);
-int InitSPI();
-void DeinitSPI();
+extern void sendCmd(uint8_t cmd, uint8_t *payload, uint32_t payloadSize);
+extern void sendCmdOnly(uint8_t cmd);
+extern void sendCmdData(uint8_t cmd, uint8_t data);
+extern int InitSPI();
+extern void DeinitSPI();
 
 #endif
