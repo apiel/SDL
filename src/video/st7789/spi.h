@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef _ST7789_SPI_H_
+#define _ST7789_SPI_H_
+
 #include <inttypes.h>
 #include <unistd.h>   // usleep
 #include <stdio.h>    // printf, stderr
@@ -210,3 +213,5 @@ void DeinitSPI()
     mem_fd = -1;
   }
 }
+
+#endif
