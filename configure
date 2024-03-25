@@ -25879,6 +25879,15 @@ printf "%s\n" "#define SDL_VIDEO_DRIVER_DUMMY 1" >>confdefs.h
     fi
 }
 
+CheckSt7789Video()
+{
+    if test x$enable_video = xyes -a x$enable_video_st7789 = xyes; then
+        SOURCES="$SOURCES $srcdir/src/video/st7789/*.c"
+        have_video=yes
+        SUMMARY_video="${SUMMARY_video} st7789"
+    fi
+}
+
 CheckOffscreenVideo()
 {
     # Check whether --enable-video-offscreen was given.
@@ -28617,6 +28626,7 @@ printf "%s\n" "#define SDL_VIDEO_DRIVER_ANDROID 1" >>confdefs.h
         CheckWerror
         CheckDeclarationAfterStatement
         CheckDummyVideo
+        CheckSt7789Video
         CheckOffscreenVideo
         CheckDiskAudio
         CheckDummyAudio
@@ -28887,6 +28897,7 @@ printf "%s\n" "#define SDL_TIMER_UNIX 1" >>confdefs.h
         CheckWerror
         CheckDeclarationAfterStatement
         CheckDummyVideo
+        CheckSt7789Video
         CheckOffscreenVideo
         CheckDiskAudio
         CheckDummyAudio
@@ -29140,6 +29151,7 @@ fi
         ARCH=haiku
         ac_default_prefix=/boot/system
         CheckDummyVideo
+        CheckSt7789Video
         CheckOffscreenVideo
         CheckDiskAudio
         CheckDummyAudio
@@ -29212,6 +29224,7 @@ printf "%s\n" "#define SDL_FILESYSTEM_HAIKU 1" >>confdefs.h
         CheckNoErrorDeprecatedDeclarationsWerror
         CheckDeclarationAfterStatement
         CheckDummyVideo
+        CheckSt7789Video
         CheckOffscreenVideo
         CheckDiskAudio
         CheckDummyAudio
@@ -29351,6 +29364,7 @@ printf "%s\n" "#define SDL_VIDEO_RENDER_OGL_ES2 1" >>confdefs.h
         CheckNoErrorDeprecatedDeclarationsWerror
         CheckDeclarationAfterStatement
         CheckDummyVideo
+        CheckSt7789Video
         CheckOffscreenVideo
         CheckDiskAudio
         CheckDummyAudio
@@ -29452,6 +29466,7 @@ printf "%s\n" "#define SDL_TIMER_UNIX 1" >>confdefs.h
         CheckNativeClient
         CheckDummyAudio
         CheckDummyVideo
+        CheckSt7789Video
         CheckOffscreenVideo
         CheckInputEvents
         CheckPTHREAD
@@ -29497,6 +29512,7 @@ printf "%s\n" "#define SDL_AUDIO_DRIVER_EMSCRIPTEN 1" >>confdefs.h
         CheckWerror
         CheckDeclarationAfterStatement
         CheckDummyVideo
+        CheckSt7789Video
         CheckOffscreenVideo
         CheckDiskAudio
         CheckDummyAudio
@@ -29557,6 +29573,7 @@ printf "%s\n" "#define SDL_TIMER_UNIX 1" >>confdefs.h
         CheckWerror
         CheckDeclarationAfterStatement
         CheckDummyVideo
+        CheckSt7789Video
         CheckOffscreenVideo
         CheckDiskAudio
         CheckDummyAudio
@@ -29614,6 +29631,7 @@ printf "%s\n" "#define SDL_TIMER_UNIX 1" >>confdefs.h
         CheckWerror
         CheckDeclarationAfterStatement
         CheckDummyVideo
+        CheckSt7789Video
         CheckDiskAudio
         CheckDummyAudio
         CheckHIDAPI
@@ -29739,6 +29757,15 @@ then :
 fi
 SDL_VENDOR_INFO=$enable_vendor_info
 
+
+if test x$have_video != xyes; then
+    if test x$enable_video = xyes; then
+
+printf "%s\n" "#define SDL_VIDEO_DRIVER_ST7789 1" >>confdefs.h
+
+    fi
+    SOURCES="$SOURCES $srcdir/src/video/st7789/*.c"
+fi
 
 # Verify that we have all the platform specific files we need
 

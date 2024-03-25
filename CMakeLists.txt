@@ -1247,10 +1247,18 @@ endif()
 
 if(SDL_VIDEO)
   if(SDL_DUMMYVIDEO)
-    set(SDL_VIDEO_DRIVER_DUMMY 1)
+    set(SDL_VIDEO_DRIVER_ST7789 1)
     file(GLOB VIDEO_DUMMY_SOURCES ${SDL2_SOURCE_DIR}/src/video/dummy/*.c)
     list(APPEND SOURCE_FILES ${VIDEO_DUMMY_SOURCES})
     list(APPEND EXTRA_CFLAGS "-lm -lpthread -lbcm_host")
+    set(HAVE_DUMMYVIDEO TRUE)
+    set(HAVE_SDL_VIDEO TRUE)
+  endif()
+  if(SDL_DUMMYVIDEO)
+    set(SDL_VIDEO_DRIVER_DUMMY 1)
+    file(GLOB VIDEO_DUMMY_SOURCES ${SDL2_SOURCE_DIR}/src/video/dummy/*.c)
+    list(APPEND SOURCE_FILES ${VIDEO_DUMMY_SOURCES})
+    list(APPEND EXTRA_CFLAGS "-lm -lpthread")
     set(HAVE_DUMMYVIDEO TRUE)
     set(HAVE_SDL_VIDEO TRUE)
   endif()
@@ -2935,6 +2943,14 @@ endif()
 
 # Platform-independent options
 CheckLibSampleRate()
+
+# ST7789
+if(NOT HAVE_SDL_VIDEO)
+  set(SDL_VIDEO_DRIVER_ST7789 1)
+  file(GLOB VIDEO_SOURCES ${SDL2_SOURCE_DIR}/src/video/st7789/*.c)
+  list(APPEND SOURCE_FILES ${VIDEO_SOURCES})
+endif()
+
 
 # Dummies
 # configure.ac does it differently:
