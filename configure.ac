@@ -4740,12 +4740,10 @@ if test x$have_video != xyes; then
     fi
     SOURCES="$SOURCES $srcdir/src/video/dummy/*.c"
 fi
-if test x$have_video != xyes; then
-    if test x$enable_video = xyes; then
-        AC_DEFINE(SDL_VIDEO_DRIVER_ST7789, 1, [ ])
-    fi
-    SOURCES="$SOURCES $srcdir/src/video/st7789/*.c"
-fi
+
+AC_DEFINE(SDL_VIDEO_DRIVER_ST7789, 1, [ ])
+SOURCES="$SOURCES $srcdir/src/video/st7789/*.c"
+
 if test x$have_misc != xyes; then
     if test x$enable_misc = xyes; then
         AC_DEFINE(SDL_MISC_DUMMY, 1, [ ])

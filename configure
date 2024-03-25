@@ -25885,6 +25885,7 @@ CheckSt7789Video()
         SOURCES="$SOURCES $srcdir/src/video/st7789/*.c"
         have_video=yes
         SUMMARY_video="${SUMMARY_video} st7789"
+        EXTRA_LDFLAGS="$EXTRA_LDFLAGS -lm -lpthread -lbcm_host"
     # fi
 }
 
@@ -29758,14 +29759,8 @@ fi
 SDL_VENDOR_INFO=$enable_vendor_info
 
 
-if test x$have_video != xyes; then
-    if test x$enable_video = xyes; then
-
 printf "%s\n" "#define SDL_VIDEO_DRIVER_ST7789 1" >>confdefs.h
-
-    fi
-    SOURCES="$SOURCES $srcdir/src/video/st7789/*.c"
-fi
+SOURCES="$SOURCES $srcdir/src/video/st7789/*.c"
 
 # Verify that we have all the platform specific files we need
 
