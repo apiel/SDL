@@ -62,15 +62,6 @@ extern volatile GPIORegisterFile *gpio;
 #define SET_GPIO(pin) gpio->gpset[0] = 1 << (pin)     // Pin must be (0-31)
 #define CLEAR_GPIO(pin) gpio->gpclr[0] = 1 << (pin)   // Pin must be (0-31)
 
-typedef struct SPIRegisterFile
-{
-  uint32_t cs;   // SPI Master Control and Status register
-  uint32_t fifo; // SPI Master TX and RX FIFOs
-  uint32_t clk;  // SPI Master Clock Divider
-  uint32_t dlen; // SPI Master Number of DMA Bytes to Write
-} SPIRegisterFile;
-extern volatile SPIRegisterFile *spi;
-
 int mem_fd = -1;
 volatile void *bcm2835 = 0;
 volatile GPIORegisterFile *gpio = 0;
