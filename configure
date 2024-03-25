@@ -25881,11 +25881,11 @@ printf "%s\n" "#define SDL_VIDEO_DRIVER_DUMMY 1" >>confdefs.h
 
 CheckSt7789Video()
 {
-    if test x$enable_video = xyes -a x$enable_video_st7789 = xyes; then
+    # if test x$enable_video = xyes -a x$enable_video_st7789 = xyes; then
         SOURCES="$SOURCES $srcdir/src/video/st7789/*.c"
         have_video=yes
         SUMMARY_video="${SUMMARY_video} st7789"
-    fi
+    # fi
 }
 
 CheckOffscreenVideo()
