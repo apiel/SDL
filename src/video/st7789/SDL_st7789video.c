@@ -123,20 +123,20 @@ VideoBootStrap ST7789_bootstrap = {
     ST7789_CreateDevice
 };
 
-// #ifdef SDL_INPUT_LINUXEV
-// VideoBootStrap ST7789_evdev_bootstrap = {
-//     ST7789VID_DRIVER_EVDEV_NAME, "SDL st7789 video driver with evdev",
-//     ST7789_CreateDevice
-// };
-// void SDL_EVDEV_Init(void);
-// void SDL_EVDEV_Poll();
-// void SDL_EVDEV_Quit(void);
-// static void ST7789_EVDEV_Poll(_THIS)
-// {
-//     (void)_this;
-//     SDL_EVDEV_Poll();
-// }
-// #endif
+#ifdef SDL_INPUT_LINUXEV
+VideoBootStrap ST7789_evdev_bootstrap = {
+    ST7789VID_DRIVER_EVDEV_NAME, "SDL st7789 video driver with evdev",
+    ST7789_CreateDevice
+};
+void SDL_EVDEV_Init(void);
+void SDL_EVDEV_Poll();
+void SDL_EVDEV_Quit(void);
+static void ST7789_EVDEV_Poll(_THIS)
+{
+    (void)_this;
+    SDL_EVDEV_Poll();
+}
+#endif
 
 int ST7789_VideoInit(_THIS)
 {
