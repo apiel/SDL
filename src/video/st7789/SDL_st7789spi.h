@@ -9,7 +9,7 @@
 #include <fcntl.h>    // open, O_RDWR, O_SYNC
 #include <sys/mman.h> // mmap, munmap
 
-#define HAS_BCM 1
+#define HAS_BCM 1 // comment for testing on non-BCM hardware (desktops, etc.)
 #ifdef HAS_BCM
 #include <bcm_host.h> // bcm_host_get_peripheral_address, bcm_host_get_peripheral_size, bcm_host_get_sdram_address
 #endif
@@ -133,14 +133,14 @@ void sendCmd(uint8_t cmd, uint8_t *payload, uint32_t payloadSize)
     spi->cs = BCM2835_SPI0_CS_TA | DISPLAY_SPI_DRIVE_SETTINGS; // Spi begins transfer
 
     // An SPI transfer to the display always starts with one control (command) byte, followed by N data bytes.
-    CLEAR_GPIO(GPIO_TFT_DATA_CONTROL);
+    clearGpio(GPIO_TFT_DATA_CONTROL);
 
     spi->fifo = cmd;
     while (!(spi->cs & (BCM2835_SPI0_CS_RXD | BCM2835_SPI0_CS_DONE))) /*nop*/
         ;
 
     if (payloadSize > 0) {
-        SET_GPIO(GPIO_TFT_DATA_CONTROL);
+        setGpio(GPIO_TFT_DATA_CONTROL);
 
         tStart = payload;
         tEnd = payload + payloadSize;
@@ -190,9 +190,9 @@ int InitSPI()
     spi = (volatile SPIRegisterFile *)((uintptr_t)bcm2835 + BCM2835_SPI0_BASE);
     gpio = (volatile GPIORegisterFile *)((uintptr_t)bcm2835 + BCM2835_GPIO_BASE);
 
-    SET_GPIO_MODE(GPIO_TFT_DATA_CONTROL, 0x01); // Data/Control pin to output (0x01)
-    SET_GPIO_MODE(GPIO_SPI0_MOSI, 0x04);
-    SET_GPIO_MODE(GPIO_SPI0_CLK, 0x04);
+    setGpioMode(GPIO_TFT_DATA_CONTROL, 0x01); // Data/Control pin to output (0x01)
+    setGpioMode(GPIO_SPI0_MOSI, 0x04);
+    setGpioMode(GPIO_SPI0_CLK, 0x04);
 
     spi->cs = BCM2835_SPI0_CS_CLEAR | DISPLAY_SPI_DRIVE_SETTINGS; // Initialize the Control and Status register to defaults: CS=0 (Chip Select), CPHA=0 (Clock Phase), CPOL=0 (Clock Polarity), CSPOL=0 (Chip Select Polarity), TA=0 (Transfer not active), and reset TX and RX queues.
     spi->clk = SPI_BUS_CLOCK_DIVISOR;                             // Clock Divider determines SPI bus speed, resulting speed=256MHz/clk
@@ -213,13 +213,13 @@ void DeinitSPI()
 #ifdef HAS_BCM
     spi->cs = BCM2835_SPI0_CS_CLEAR | DISPLAY_SPI_DRIVE_SETTINGS;
 
-    SET_GPIO_MODE(GPIO_TFT_DATA_CONTROL, 0);
+    setGpioMode(GPIO_TFT_DATA_CONTROL, 0);
 
-    SET_GPIO_MODE(GPIO_SPI0_CE1, 0);
-    SET_GPIO_MODE(GPIO_SPI0_CE0, 0);
-    SET_GPIO_MODE(GPIO_SPI0_MISO, 0);
-    SET_GPIO_MODE(GPIO_SPI0_MOSI, 0);
-    SET_GPIO_MODE(GPIO_SPI0_CLK, 0);
+    setGpioMode(GPIO_SPI0_CE1, 0);
+    setGpioMode(GPIO_SPI0_CE0, 0);
+    setGpioMode(GPIO_SPI0_MISO, 0);
+    setGpioMode(GPIO_SPI0_MOSI, 0);
+    setGpioMode(GPIO_SPI0_CLK, 0);
 
     if (bcm2835) {
         munmap((void *)bcm2835, bcm_host_get_peripheral_size());
