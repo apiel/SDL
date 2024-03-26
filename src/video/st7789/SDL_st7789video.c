@@ -46,6 +46,7 @@
 #include "SDL_hints.h"
 #include "SDL_st7789framebuffer_c.h"
 #include "SDL_st7789video.h"
+#include "SDL_st7789config.h"
 
 #define ST7789VID_DRIVER_NAME       "st7789"
 #define ST7789VID_DRIVER_EVDEV_NAME "evdev"
@@ -146,9 +147,12 @@ int ST7789_VideoInit(_THIS)
 
     /* Use a fake 32-bpp desktop mode */
     SDL_zero(mode);
-    mode.format = SDL_PIXELFORMAT_RGB888;
-    mode.w = 1024;
-    mode.h = 768;
+    // SDL_PIXELFORMAT_BGR565
+    // SDL_PIXELFORMAT_RGB565
+    // mode.format = SDL_PIXELFORMAT_RGB888;
+    mode.format = SDL_PIXELFORMAT_RGB565;
+    mode.w = DISPLAY_WIDTH;
+    mode.h = DISPLAY_HEIGHT;
     mode.refresh_rate = 60;
     mode.driverdata = NULL;
     if (SDL_AddBasicVideoDisplay(&mode) < 0) {

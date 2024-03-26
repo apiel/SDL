@@ -14,7 +14,7 @@
 #include <bcm_host.h> // bcm_host_get_peripheral_address, bcm_host_get_peripheral_size, bcm_host_get_sdram_address
 #endif
 
-#include "config.h"
+#include "SDL_st7789config.h"
 
 
 #define BCM2835_GPIO_BASE  0x200000 // Address to GPIO register file

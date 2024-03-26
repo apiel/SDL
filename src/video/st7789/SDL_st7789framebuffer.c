@@ -29,7 +29,7 @@
 #include <unistd.h>
 
 #include "SDL_st7789spi.h"
-#include "config.h"
+#include "SDL_st7789config.h"
 
 #define DISPLAY_SET_CURSOR_X 0x2A
 #define DISPLAY_SET_CURSOR_Y 0x2B
