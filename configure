@@ -29759,8 +29759,8 @@ fi
 SDL_VENDOR_INFO=$enable_vendor_info
 
 
-printf "%s\n" "#define SDL_VIDEO_DRIVER_ST7789 1" >>confdefs.h
-SOURCES="$SOURCES $srcdir/src/video/st7789/*.c"
+# printf "%s\n" "#define SDL_VIDEO_DRIVER_ST7789 1" >>confdefs.h
+# SOURCES="$SOURCES $srcdir/src/video/st7789/*.c"
 
 # Verify that we have all the platform specific files we need
 
