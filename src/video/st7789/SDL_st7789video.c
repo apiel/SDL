@@ -65,7 +65,6 @@ static int ST7789_Available(void)
 {
     const char *envr = SDL_GetHint(SDL_HINT_VIDEODRIVER);
     if (envr) {
-        printf("........................... yo %s == %s\n", envr, ST7789VID_DRIVER_NAME);
         if (SDL_strcmp(envr, ST7789VID_DRIVER_NAME) == 0) {
             return 1;
         }
@@ -75,8 +74,6 @@ static int ST7789_Available(void)
             return 1;
         }
 #endif
-    } else {
-        printf("........................... yo envr\n");
     }
     return 0;
 }
