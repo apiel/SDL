@@ -28,8 +28,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include "config.h"
 #include "SDL_st7789spi.h"
+#include "config.h"
 
 #define DISPLAY_SET_CURSOR_X 0x2A
 #define DISPLAY_SET_CURSOR_Y 0x2B
@@ -85,6 +85,8 @@ void InitSPIDisplay()
     setGpio(GPIO_TFT_RESET_PIN);
     usleep(120 * 1000);
 
+    printf("Initializing SPI bus\n");
+
     // Do the initialization with a very low SPI bus speed, so that it will succeed even if the bus speed chosen by the user is too high.
     spi->clk = 34;
     __sync_synchronize();
@@ -123,6 +125,8 @@ void InitSPIDisplay()
     if ((madctl & MADCTL_ROW_ADDRESS_ORDER_SWAP)) {
         sendCmd(0x37 /*VSCSAD: Vertical Scroll Start Address of RAM*/, data, 4);
     }
+
+    printf("Display initialized\n");
 
     drawFillRect(0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, 0); // clear screen
 
