@@ -29,7 +29,7 @@
 #include <unistd.h>
 
 #include "config.h"
-#include "spi.h"
+#include "SDL_st7789spi.h"
 
 #define DISPLAY_SET_CURSOR_X 0x2A
 #define DISPLAY_SET_CURSOR_Y 0x2B
@@ -71,29 +71,18 @@ void drawFillRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color
     }
 }
 
-void drawStuff()
-{
-    int x, y;
-    for (y = 0; y < DISPLAY_HEIGHT; ++y) {
-        x = DISPLAY_HEIGHT - y - 1;
-        drawPixel(x, y, 0xFF00FF);
-    }
-
-    // drawFillRect(20, 40, 20, 20, 0xFF00FF);
-}
-
 void InitSPIDisplay()
 {
     uint8_t madctl = 0;
     uint8_t data[4] = { 0, 0, (uint8_t)(240 >> 8), (uint8_t)(240 & 0xFF) };
 
     printf("Resetting display at reset GPIO pin %d\n", GPIO_TFT_RESET_PIN);
-    SET_GPIO_MODE(GPIO_TFT_RESET_PIN, 1);
-    SET_GPIO(GPIO_TFT_RESET_PIN);
+    setGpioMode(GPIO_TFT_RESET_PIN, 1);
+    setGpio(GPIO_TFT_RESET_PIN);
     usleep(120 * 1000);
-    CLEAR_GPIO(GPIO_TFT_RESET_PIN);
+    clearGpio(GPIO_TFT_RESET_PIN);
     usleep(120 * 1000);
-    SET_GPIO(GPIO_TFT_RESET_PIN);
+    setGpio(GPIO_TFT_RESET_PIN);
     usleep(120 * 1000);
 
     // Do the initialization with a very low SPI bus speed, so that it will succeed even if the bus speed chosen by the user is too high.
@@ -137,8 +126,8 @@ void InitSPIDisplay()
 
     drawFillRect(0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, 0); // clear screen
 
-    SET_GPIO_MODE(GPIO_TFT_BACKLIGHT, 1);
-    SET_GPIO(GPIO_TFT_BACKLIGHT);
+    setGpioMode(GPIO_TFT_BACKLIGHT, 1);
+    setGpio(GPIO_TFT_BACKLIGHT);
 
     sendCmdOnly(/*Display ON*/ 0x29);
     usleep(100 * 1000);
@@ -146,9 +135,6 @@ void InitSPIDisplay()
     // And speed up to the desired operation speed finally after init is done.
     usleep(10 * 1000); // Delay a bit before restoring CLK, or otherwise this has been observed to cause the display not init if done back to back after the clear operation above.
     spi->clk = SPI_BUS_CLOCK_DIVISOR;
-
-    // printf("draw stuff\n");
-    // drawStuff();
 }
 
 #define ST7789_SURFACE "_SDL_DummySurface"
@@ -187,15 +173,11 @@ int SDL_ST7789_CreateWindowFramebuffer(_THIS, SDL_Window *window, Uint32 *format
 
 int SDL_ST7789_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect *rects, int numrects)
 {
-    static int frame_number;
     SDL_Surface *surface;
-    Uint8 *bits;
-    int i, bw, pad, x, y, w, h;
-    uint8_t pixel[BYTESPERPIXEL];
+    int x, y, w, h;
     int pos;
     uint8_t *pixels;
     uint16_t rgb;
-    SDL_Color color;
     uint16_t size;
     uint8_t pixelsBuffer[2048];
 
@@ -211,33 +193,6 @@ int SDL_ST7789_UpdateWindowFramebuffer(_THIS, SDL_Window *window, const SDL_Rect
     if (size > sizeof(pixelsBuffer)) {
         return SDL_SetError("pixels buffer too small");
     }
-
-    // for (x = 0; x < w; x++) {
-    //     for (y = 0; y < h; y++) {
-    //         pos = (y * surface->w + x) * surface->format->BytesPerPixel;
-    //         pixels = surface->pixels + pos;
-
-    //         // rgb = (((pixels[0] >> 3) << 11) | ((pixels[1] >> 2) << 5) | (pixels[2] >> 3));
-    //         rgb = ((pixels[0] & 0xF8) << 8) | ((pixels[1] & 0xFC) << 3) | (pixels[2] >> 3);
-    //         pixel[0] = (uint8_t)(rgb >> 8);
-    //         pixel[1] = (uint8_t)(rgb & 0xFF);
-
-    //         // SDL_GetRGBA(pixels, surface->format, &color.r, &color.g, &color.b, &color.a);
-    //         // rgb = (((color.r >> 3) << 11) | ((color.g >> 2) << 5) | (color.b >> 3));
-    //         // pixel[0] = (uint8_t)(rgb >> 8);
-    //         // pixel[1] = (uint8_t)(rgb & 0xFF);
-
-    //         // sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)x, (uint16_t)x);
-    //         // sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
-    //         // let's swap x pos because of MADCTL_ROW_ADDRESS_ORDER_SWAP
-    //         // sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)w - x, (uint16_t)w - x);
-    //         // sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)y, (uint16_t)y);
-    //         // Let's rotate 90 degrees
-    //         sendAddr(DISPLAY_SET_CURSOR_Y, (uint16_t)x, (uint16_t)x);
-    //         sendAddr(DISPLAY_SET_CURSOR_X, (uint16_t)y, (uint16_t)y);
-    //         sendCmd(DISPLAY_WRITE_PIXELS, pixel, 2);
-    //     }
-    // }
 
     // draw row by row
     for (x = 0; x < w; x++) {
@@ -274,7 +229,7 @@ void SDL_ST7789_VideoQuit(_THIS)
 {
     printf("st7789 quit\n");
     sendCmdOnly(/*Display OFF*/ 0x28);
-    CLEAR_GPIO(GPIO_TFT_BACKLIGHT);
+    clearGpio(GPIO_TFT_BACKLIGHT);
     DeinitSPI();
 }
 

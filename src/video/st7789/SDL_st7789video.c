@@ -142,6 +142,8 @@ int ST7789_VideoInit(_THIS)
 {
     SDL_DisplayMode mode;
 
+// FIXME might want to change those settings to fit ST7789's requirements!!
+
     /* Use a fake 32-bpp desktop mode */
     SDL_zero(mode);
     mode.format = SDL_PIXELFORMAT_RGB888;
