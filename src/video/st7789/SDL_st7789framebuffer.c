@@ -89,10 +89,8 @@ void InitSPIDisplay()
 
     // Do the initialization with a very low SPI bus speed, so that it will succeed even if the bus speed chosen by the user is too high.
     spi->clk = 34;
-printf("debug 1\n");
     __sync_synchronize();
 
-printf("debug 2\n");
     sendCmdOnly(0x11 /*Sleep Out*/);
     usleep(120 * 1000);
     sendCmdData(0x3A /*COLMOD: Pixel Format Set*/, 0x05 /*16bpp*/);
@@ -108,7 +106,6 @@ printf("debug 2\n");
     madctl |= MADCTL_ROW_ADDRESS_ORDER_SWAP;
     madctl |= ST7789_MADCTL_BGR; // Because we swap order, we need to use BGR...
     madctl ^= MADCTL_ROTATE_180_DEGREES;
-printf("debug 3\n");
     sendCmdData(0x36 /*MADCTL: Memory Access Control*/, madctl);
     usleep(10 * 1000);
 
@@ -119,7 +116,6 @@ printf("debug 3\n");
 
     sendCmdOnly(0x13 /*NORON: Partial off (normal)*/);
     usleep(10 * 1000);
-printf("debug 4\n");
     // The ST7789 controller is actually a unit with 320x240 graphics memory area, but only 240x240 portion
     // of it is displayed. Therefore if we wanted to swap row address mode above, writes to Y=0...239 range will actually land in
     // memory in row addresses Y = 319-(0...239) = 319...80 range. To view this range, we must scroll the view by +80 units in Y
@@ -127,8 +123,6 @@ printf("debug 4\n");
     if ((madctl & MADCTL_ROW_ADDRESS_ORDER_SWAP)) {
         sendCmd(0x37 /*VSCSAD: Vertical Scroll Start Address of RAM*/, data, 4);
     }
-
-    printf("Display initialized\n");
 
     drawFillRect(0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT, 0); // clear screen
 
