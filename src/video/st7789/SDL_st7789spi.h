@@ -9,6 +9,7 @@
 #include <fcntl.h>    // open, O_RDWR, O_SYNC
 #include <sys/mman.h> // mmap, munmap
 
+#define HAS_BCM 1
 #ifdef HAS_BCM
 #include <bcm_host.h> // bcm_host_get_peripheral_address, bcm_host_get_peripheral_size, bcm_host_get_sdram_address
 #endif
