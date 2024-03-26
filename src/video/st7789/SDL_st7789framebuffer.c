@@ -40,6 +40,7 @@
 void sendAddr(uint8_t cmd, uint16_t addr0, uint16_t addr1)
 {
     uint8_t addr[4] = { (uint8_t)(addr0 >> 8), (uint8_t)(addr0 & 0xFF), (uint8_t)(addr1 >> 8), (uint8_t)(addr1 & 0xFF) };
+    printf("sendAddr: %02X %02X %02X %02X\n", cmd, addr[0], addr[1], addr[2]);
     sendCmd(cmd, addr, 4);
 }
 
