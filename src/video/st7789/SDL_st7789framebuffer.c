@@ -219,7 +219,6 @@ void SDL_ST7789_DestroyWindowFramebuffer(_THIS, SDL_Window *window)
 {
     SDL_Surface *surface;
 
-    printf("DestroyWindowFramebuffer\n");
     surface = (SDL_Surface *)SDL_SetWindowData(window, ST7789_SURFACE, NULL);
     SDL_FreeSurface(surface);
 }

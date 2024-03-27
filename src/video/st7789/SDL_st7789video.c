@@ -47,6 +47,7 @@
 #include "SDL_st7789framebuffer_c.h"
 #include "SDL_st7789video.h"
 #include "SDL_st7789config.h"
+#include "SDL_st7789events_c.h"
 
 #define ST7789VID_DRIVER_NAME       "st7789"
 #define ST7789VID_DRIVER_EVDEV_NAME "evdev"
@@ -103,6 +104,7 @@ static SDL_VideoDevice *ST7789_CreateDevice(void)
     /* Set the function pointers */
     device->VideoInit = ST7789_VideoInit;
     device->VideoQuit = ST7789_VideoQuit;
+    device->PumpEvents = ST7789_PumpEvents;
 #ifdef SDL_INPUT_LINUXEV
     if (evdev) {
         device->PumpEvents = ST7789_EVDEV_Poll;
